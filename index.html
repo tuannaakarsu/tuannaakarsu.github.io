@@ -1,0 +1,618 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>TUANNA AKARSU // AI ENGINEER PORTFOLIO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #050816;
+      --bg2:      #0e141a;
+      --bg3:      #161c22;
+      --bg4:      #242b31;
+      --bg5:      #080f14;
+      --fg:       #dde3eb;
+      --fg2:      #bdc8d1;
+      --fg3:      #87929a;
+      --primary:  #8ed5ff;
+      --pBtn:     #38bdf8;
+      --pBtnTxt:  #004965;
+      --border:   #3e484f;
+      --secBg:    rgba(87,27,193,0.2);
+      --secTxt:   #c4abff;
+      --secBdr:   rgba(87,27,193,0.3);
+      --mono:     'JetBrains Mono', monospace;
+      --sans:     'Space Grotesk', sans-serif;
+      --body:     'Inter', sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0; padding: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--body);
+      /* hiç overflow tanımı yok — wrapper halleder */
+    }
+
+    /* ── WRAPPER ── */
+    #wrapper {
+      position: fixed;
+      inset: 0;              /* top/right/bottom/left: 0 */
+      overflow: hidden;
+    }
+
+    /* ── HER İKİ SAYFA ── */
+    .page {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      transition: transform .5s cubic-bezier(.77,0,.18,1);
+      will-change: transform;
+    }
+    #page1 { transform: translateX(0); }
+    #page2 { transform: translateX(100%); }
+
+    /* aktif geçiş */
+    body.page2-active #page1 { transform: translateX(-100%); }
+    body.page2-active #page2 { transform: translateX(0); }
+
+    /* ── GRID BG ── */
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(56,189,248,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,189,248,.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* ── GLASS CARD ── */
+    .glass {
+      background: rgba(11,17,32,.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid #1e293b;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .glass:hover { border-color: var(--pBtn); box-shadow: 0 0 20px rgba(56,189,248,.15); }
+
+    /* ── PULSE DOT ── */
+    .dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    /* ── TERMINAL CURSOR ── */
+    .tcursor {
+      display: inline-block;
+      width: 8px; height: 1.1em;
+      background: var(--pBtn);
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { from,to{opacity:1} 50%{opacity:0} }
+
+    /* ══════════════════════════════════════
+       SAYFA 1 — HERO
+    ══════════════════════════════════════ */
+    #page1 .inner {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2.5rem 1.5rem;
+    }
+    #page1 .content { max-width: 700px; margin: 0 auto; width: 100%; }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-bottom: 2.5rem;
+    }
+    .hero-logo { font-family: var(--sans); font-size: 18px; font-weight: 700; letter-spacing: -.04em; color: var(--primary); }
+    .hero-status { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 12px; color: var(--fg2); }
+
+    .hero-tag { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--fg2); margin-bottom: .75rem; }
+
+    .hero-h1 {
+      font-family: var(--sans);
+      font-size: clamp(2rem, 7vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -.02em;
+      color: var(--fg);
+      margin-bottom: 1rem;
+    }
+    .hero-h1 .acc { color: var(--primary); }
+
+    .hero-desc { font-size: 15px; line-height: 1.7; color: var(--fg2); max-width: 500px; margin-bottom: 2rem; }
+
+    .hero-btns { display: flex; flex-direction: column; gap: .75rem; margin-bottom: 2rem; }
+
+    .btn-p {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: var(--pBtn); color: var(--pBtnTxt);
+      font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .08em;
+      padding: 13px 22px; border: none; cursor: pointer; text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: opacity .2s;
+    }
+    .btn-p:active { opacity: .8; }
+
+    .btn-s {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: transparent; color: var(--fg);
+      font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: .08em;
+      padding: 12px 22px; border: 1px solid var(--border); cursor: pointer; text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: border-color .2s;
+    }
+    .btn-s:active { border-color: var(--primary); }
+
+    .hero-div { border: none; border-top: 1px solid rgba(62,72,79,.4); margin-bottom: 1.25rem; }
+
+    .hero-links { display: flex; flex-direction: column; gap: .6rem; }
+    .hero-link {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-family: var(--mono); font-size: 12px; color: var(--fg2);
+      text-decoration: none; transition: color .2s;
+    }
+    .hero-link:active { color: var(--primary); }
+    .hero-loc { font-family: var(--mono); font-size: 11px; color: var(--fg3); margin-top: .6rem; }
+
+    .icon { width: 1em; height: 1em; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; display: inline-block; vertical-align: middle; flex-shrink: 0; }
+
+    /* ══════════════════════════════════════
+       SAYFA 2 — PORTFOLYO
+    ══════════════════════════════════════ */
+
+    /* NAV */
+    .p2nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(14,20,26,.9);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(62,72,79,.3);
+    }
+    .p2nav-inner {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 1.25rem; height: 52px;
+      max-width: 1100px; margin: 0 auto; gap: 1rem;
+    }
+    .p2nav-brand {
+      font-family: var(--sans); font-size: 15px; font-weight: 700;
+      letter-spacing: -.03em; color: var(--primary);
+      cursor: pointer; background: none; border: none;
+      -webkit-tap-highlight-color: transparent;
+      flex: 1; min-width: 0; text-align: left;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .p2nav-back {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--pBtn); color: var(--pBtnTxt);
+      font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .08em;
+      padding: 8px 14px; border: none; border-radius: 2px; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0; white-space: nowrap;
+    }
+
+    /* CONTENT WRAPPER */
+    .p2body { padding: 0 1.25rem 4rem; max-width: 1100px; margin: 0 auto; }
+
+    /* INTRO */
+    .intro {
+      padding: 2rem 0 1.5rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    .intro-tag { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--primary); margin-bottom: .4rem; }
+    .intro h1 { font-family: var(--sans); font-size: clamp(1.6rem, 5vw, 2.5rem); font-weight: 700; color: var(--fg); line-height: 1.15; margin-bottom: .6rem; }
+    .intro h1 .acc { color: var(--primary); }
+    .intro p { font-size: 14px; line-height: 1.65; color: var(--fg2); max-width: 580px; }
+
+    /* SECTION HEADER */
+    .sec-hdr { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.25rem; padding-bottom: .4rem; border-bottom: 2px solid var(--border); flex-wrap: wrap; gap: .4rem; }
+    .sec-hdr h2 { font-family: var(--sans); font-size: 18px; font-weight: 600; color: var(--fg); }
+    .sec-cnt { font-family: var(--mono); font-size: 12px; color: var(--fg2); }
+
+    /* PROJECT GRID */
+    .proj-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2.5rem; }
+    .proj-card { background: rgba(11,17,32,.6); border: 1px solid #1e293b; padding: 1.25rem; transition: border-color .3s, box-shadow .3s; }
+    .proj-thumb{
+        position:relative;
+        height:320px;
+        overflow:hidden;
+        background:#0f172a;
+    }
+
+    .proj-thumb img{
+        width:100%;
+        height:100%;
+        object-fit:contain;
+        object-position:center;
+        transition:.4s;
+    }
+
+    .proj-thumb{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    }
+
+    .proj-thumb svg{
+    width:70px;
+    height:70px;
+    color:#7ec8ff;
+    }
+
+    .proj-card:hover .proj-thumb img{
+        transform:scale(1.03);
+    }
+
+    .proj-badge{
+    position:absolute;
+    top:14px;
+    right:14px;
+
+    background:rgba(15,23,42,.85);
+    color:#8fd3ff;
+
+    border:1px solid #38bdf8;
+
+    padding:6px 12px;
+
+    font-family:var(--mono);
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.08em;
+
+    text-transform:uppercase;
+
+    z-index:2;
+    }
+    .proj-title { font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: .4rem; }
+    .proj-desc { font-size: 13px; line-height: 1.6; color: var(--fg2); margin-bottom: .75rem; }
+    .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: .9rem; }
+    .tag { display: inline-block; background: var(--secBg); color: var(--secTxt); border: 1px solid var(--secBdr); font-family: var(--mono); font-size: 11px; padding: 3px 10px; white-space: nowrap; }
+    .proj-link { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 12px; letter-spacing: .05em; color: var(--primary); text-decoration: none; }
+
+    /* TECH */
+    .tech-sec { background: var(--bg5); border-top: 1px solid rgba(62,72,79,.2); border-bottom: 1px solid rgba(62,72,79,.2); padding: 2rem 1.25rem; margin: 0 -1.25rem 2.5rem; }
+    .tech-title { font-family: var(--sans); font-size: 20px; font-weight: 700; letter-spacing: -.03em; color: var(--primary); text-align: center; margin-bottom: .3rem; }
+    .tech-sub { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--fg2); text-align: center; margin-bottom: 1.25rem; }
+    .tech-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .ttag { display: inline-block; background: rgba(11,17,32,.6); border: 1px solid #1e293b; color: var(--primary); font-family: var(--mono); font-size: 12px; padding: 6px 14px; white-space: nowrap; }
+
+    /* TIMELINE */
+    .tl-title { font-family: var(--sans); font-size: 18px; font-weight: 600; color: var(--fg); padding-bottom: .4rem; border-bottom: 2px solid var(--border); margin-bottom: 2rem; }
+    .tl-list { position: relative; border-left: 1px solid rgba(62,72,79,.3); margin-left: 1rem; padding-left: 1.5rem; margin-bottom: 2.5rem; }
+    .tl-item { position: relative; margin-bottom: 2rem; }
+    .tl-dot { position: absolute; left: -2.1rem; top: 4px; width: 18px; height: 18px; border-radius: 50%; border: 3px solid var(--bg); }
+    .tl-dot.on { background: var(--primary); box-shadow: 0 0 10px rgba(56,189,248,.5); }
+    .tl-dot.off { background: var(--border); }
+    .tl-role { font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--fg); }
+    .tl-date { font-family: var(--mono); font-size: 12px; color: var(--primary); }
+    .tl-co { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--primary); margin: .3rem 0 .6rem; }
+    .tl-card { background: rgba(11,17,32,.6); border: 1px solid #1e293b; padding: .9rem 1rem; }
+    .tl-card.on { border-left: 3px solid var(--primary); }
+    .tl-card.off { border-left: 3px solid var(--border); }
+    .tl-card li { display: flex; gap: 8px; font-size: 13px; line-height: 1.6; color: var(--fg2); margin-bottom: .3rem; list-style: none; }
+    .tl-card li .b { color: var(--primary); flex-shrink: 0; }
+
+    /* TERMINAL CONTACT */
+    .term-box { background: #000; border: 1px solid rgba(62,72,79,.3); border-radius: 2px; overflow: hidden; margin-bottom: 2rem; }
+    .term-hdr { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-bottom: 1px solid rgba(62,72,79,.2); }
+    .term-dots { display: flex; gap: 6px; }
+    .term-dots span { width: 12px; height: 12px; border-radius: 50%; }
+    .term-path { font-family: var(--mono); font-size: 11px; color: var(--fg2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 55vw; }
+    .term-body { padding: 1.25rem; font-family: var(--mono); font-size: 13px; line-height: 1.7; }
+    .term-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 1rem 0 1.25rem; }
+    .term-lbl { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--fg2); margin-bottom: 3px; }
+    .term-val { color: var(--primary); text-decoration: none; word-break: break-all; font-size: 13px; }
+    .term-val:hover { text-decoration: underline; }
+    .term-btns { display: flex; flex-direction: column; gap: .6rem; margin-top: 1rem; }
+
+    /* FOOTER */
+    .p2foot { background: var(--bg5); border-top: 1px solid rgba(62,72,79,.2); padding: 1.25rem; }
+    .p2foot-in { display: flex; flex-direction: column; gap: .6rem; max-width: 1100px; margin: 0 auto; }
+    .foot-copy { font-family: var(--mono); font-size: 11px; color: var(--fg3); }
+    .foot-links { display: flex; gap: 1.25rem; }
+    .foot-a { font-family: var(--mono); font-size: 12px; color: var(--fg2); text-decoration: none; }
+    .foot-a:hover { color: var(--primary); }
+
+    /* ── DESKTOP ── */
+    @media (min-width: 640px) {
+      #page1 .inner { padding: 3rem; }
+      .hero-btns { flex-direction: row; align-items: center; }
+      .hero-links { flex-direction: row; flex-wrap: wrap; gap: 1.25rem; }
+      .proj-grid { grid-template-columns: 1fr 1fr; }
+      .term-grid { grid-template-columns: 1fr 1fr; }
+      .term-btns { flex-direction: row; }
+      .p2foot-in { flex-direction: row; justify-content: space-between; align-items: center; }
+      .p2nav-inner { padding: 0 2rem; }
+      .p2body { padding: 0 2rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="wrapper">
+
+  <!-- ══ SAYFA 1 ══ -->
+  <div class="page" id="page1">
+    <div class="inner grid-bg">
+      <div class="content">
+
+        <div class="hero-top">
+          <span class="hero-logo">tuanna.dev</span>
+          <div class="hero-status"><span class="dot"></span> yeni fırsatlara açık</div>
+        </div>
+
+        <p class="hero-tag">// ai developer &amp; yazılım mühendisi</p>
+        <h1 class="hero-h1">
+          Tuanna Akarsu<br>
+          <span class="acc">görüntüler okur,</span><br>
+          modeller inşa eder.
+        </h1>
+        <p class="hero-desc">Yazılım Mühendisliği mezunu. Bilgisayarlı görü, makine öğrenmesi ve AI destekli backend sistemler üzerine çalışıyorum. İstanbul merkezli, uzaktan çalışmaya açık.</p>
+
+        <div class="hero-btns">
+          <button class="btn-p" id="goPage2">
+            Portfolyoyu İncele
+            <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+          <a href="mailto:akarsutuanna@gmail.com" class="btn-s">
+            <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            İletişime Geç
+          </a>
+        </div>
+
+        <hr class="hero-div">
+
+        <div class="hero-links">
+          <a href="https://github.com/tuannaakarsu" target="_blank" class="hero-link">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+          <a href="https://www.linkedin.com/in/tuanna-akarsu" target="_blank" class="hero-link">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+          <a href="mailto:akarsutuanna@gmail.com" class="hero-link">
+            <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            akarsutuanna@gmail.com
+          </a>
+        </div>
+        <p class="hero-loc">İstanbul, TR</p>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SAYFA 2 ══ -->
+  <div class="page" id="page2">
+
+    <nav class="p2nav">
+      <div class="p2nav-inner">
+        <button class="p2nav-brand" id="goPage1brand">TUANNA_AKARSU</button>
+        <button class="p2nav-back" id="goPage1btn">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          GERİ
+        </button>
+      </div>
+    </nav>
+
+    <div class="p2body grid-bg">
+
+      <div class="intro">
+        <p class="intro-tag">// DIRECTIVE_04: RETRIEVE_PROJECT_CHRONICLES</p>
+        <h1>Experience <span class="acc">&amp;</span> Engineering</h1>
+        <p>A curated archive of neural architecture implementations, computer vision research, and large-scale deployment pipelines built for high-performance AI environments.</p>
+      </div>
+
+      <!-- PROJELER -->
+      <div id="projeler">
+        <div class="sec-hdr">
+          <h2>FEATURED_PROJECTS</h2>
+          <span class="sec-cnt">[ COUNT: 04 ]</span>
+        </div>
+        <div class="proj-grid">
+
+          <div class="proj-card">
+            <div class="proj-thumb">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 1 3 3v1l4 3-4 3v8H9v-8L5 9l4-3V5a3 3 0 0 1 3-3z"/></svg>
+              <span class="proj-badge">BITIRME_PROJESI</span>
+            </div>
+            <h3 class="proj-title">Virtual Try-On Sistemi</h3>
+            <p class="proj-desc">U-Net ile görüntü segmentasyonu ve MediaPipe ile poz tespiti yaparak kullanıcının üzerine sanal kıyafet giydiren uçtan uca bir AI sistemi.</p>
+            <div class="proj-tags"><span class="tag">Python</span><span class="tag">U-Net</span><span class="tag">MediaPipe</span><span class="tag">Flask</span></div>
+            <a href="https://github.com/tuannaakarsu/bitirme" target="_blank" class="proj-link">VIEW_REPOSITORY <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+
+          <div class="proj-card">
+            <div class="proj-thumb">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              <span class="proj-badge">AI_BACKEND</span>
+            </div>
+            <h3 class="proj-title">Çalışan Davranışı Tahmin Modeli</h3>
+            <p class="proj-desc">ML tabanlı çalışan davranışı ve istifa tahmin modeli. REST API ile backend sistemlere entegre edildi. AWS altyapısı ile ölçeklenebilir mimari.</p>
+            <div class="proj-tags"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">AWS</span></div>
+            <a href="https://zpigo.com" target="_blank" class="proj-link">VIEW_PROJECT <svg class="icon" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+          </div>
+
+          <div class="proj-card">
+            <div class="proj-thumb">
+              <img src="images\Gemini_Generated_Image_bx98npbx98npbx98.png" alt="HealFeel Projesi">
+              <span class="proj-badge">GÖRÜNTÜ_İŞLEME</span>
+            </div>
+            <h3 class="proj-title">CNN Tabanlı Görüntü Sınıflandırma</h3>
+            <p class="proj-desc">PyTorch ve OpenCV ile geliştirilen CNN modeli. Görüntü verilerinin SQL Server veritabanına entegrasyonu ve model performansının iyileştirilmesi.</p>
+            <div class="proj-tags"><span class="tag">PyTorch</span><span class="tag">OpenCV</span><span class="tag">CNN</span><span class="tag">SQL Server</span></div>
+          </div>
+
+          <div class="proj-card">
+            <div class="proj-thumb">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><circle cx="11" cy="11" r="3"/></svg>
+              <span class="proj-badge">NESNE_TESPİTİ</span>
+            </div>
+            <h3 class="proj-title">YOLO Tabanlı Nesne Tespiti</h3>
+            <p class="proj-desc">Quantum Dynamics Kulübü kapsamında YOLO ve OpenCV ile nesne tespiti projeleri. QR tespiti, şekil ve renk sınıflandırma sistemleri.</p>
+            <div class="proj-tags"><span class="tag">YOLO</span><span class="tag">OpenCV</span><span class="tag">Python</span></div>
+            <a href="https://github.com/zynpnrsy/akincilar" target="_blank" class="proj-link">VIEW_REPOSITORY <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+
+          <div class="proj-card">
+            <div class="proj-thumb">
+              <img src="images\image.png" alt="HealFeel Projesi">
+              <span class="proj-badge">BACKEND</span>
+            </div>
+            <h3 class="proj-title">E-Ticaret Backend Sistemi</h3>
+            <p class="proj-desc">İstanilen 3 ayrı sitenin backend altyapısının kurulması ve yazılmasında çalıştım.Backend araçları ve PostgreSQL gibi veritabanı araçları kullandım.</p>
+            <div class="proj-tags"><span class="tag">PostgreSQL</span><span class="tag">Python</span></div>
+            <a href="https://healfeel.com/tr" target="_blank" class="proj-link">VIEW_PROJECT <svg class="icon" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TEKNOLOJİLER -->
+      <div id="teknolojiler" class="tech-sec">
+        <h2 class="tech-title">TECHNICAL_CORE</h2>
+        <p class="tech-sub">Kullandığım teknolojiler ve araçlar</p>
+        <div class="tech-tags">
+          <span class="ttag">Python</span><span class="ttag">PyTorch</span><span class="ttag">TensorFlow</span>
+          <span class="ttag">OpenCV</span><span class="ttag">CNN</span><span class="ttag">YOLO</span>
+          <span class="ttag">Flask</span><span class="ttag">FastAPI</span><span class="ttag">AWS</span>
+          <span class="ttag">Docker</span><span class="ttag">SQL</span><span class="ttag">Git</span>
+        </div>
+      </div>
+
+      <!-- DENEYİM -->
+      <div id="deneyim">
+        <h2 class="tl-title">EVOLUTION_TIMELINE</h2>
+        <div class="tl-list">
+          <div class="tl-item">
+            <span class="tl-dot on"></span>
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.3rem;margin-bottom:.3rem">
+              <span class="tl-role">AI Developer (Gönüllü)</span>
+              <span class="tl-date">Eki 2025 — May 2026</span>
+            </div>
+            <p class="tl-co">Zpigo · Türkiye, Remote</p>
+            <div class="tl-card on"><ul>
+              <li><span class="b">▹</span> ML tabanlı çalışan davranışı ve istifa tahmin modeli</li>
+              <li><span class="b">▹</span> AI modellerini REST API ile backend sistemlere entegrasyon</li>
+              <li><span class="b">▹</span> AWS üzerinde ölçeklenebilir AI sistem mimarisi</li>
+            </ul></div>
+          </div>
+          <div class="tl-item">
+            <span class="tl-dot off"></span>
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.3rem;margin-bottom:.3rem">
+              <span class="tl-role">Veri Analitiği Stajyeri</span>
+              <span class="tl-date">Ağu 2024 — Eki 2024</span>
+            </div>
+            <p class="tl-co">Mobiliz · Ankara</p>
+            <div class="tl-card off"><ul>
+              <li><span class="b">▹</span> PyTorch ve OpenCV ile CNN tabanlı görüntü sınıflandırma</li>
+              <li><span class="b">▹</span> Görüntü verilerini SQL Server veritabanına entegrasyon</li>
+            </ul></div>
+          </div>
+          <div class="tl-item">
+            <span class="tl-dot off"></span>
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.3rem;margin-bottom:.3rem">
+              <span class="tl-role">Görüntü İşleme Takım Üyesi</span>
+              <span class="tl-date">Haz 2023 — Haz 2024</span>
+            </div>
+            <p class="tl-co">Quantum Dynamics Kulübü · İstinye Üniversitesi</p>
+            <div class="tl-card off"><ul>
+              <li><span class="b">▹</span> YOLO ve OpenCV ile nesne tespiti projeleri</li>
+              <li><span class="b">▹</span> QR tespiti, şekil ve renk sınıflandırma sistemleri</li>
+            </ul></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- İLETİŞİM -->
+      <div id="iletisim" class="term-box">
+        <div class="term-hdr">
+          <div class="term-dots">
+            <span style="background:rgba(255,180,171,.5)"></span>
+            <span style="background:rgba(142,213,255,.5)"></span>
+            <span style="background:rgba(51,58,64,.6)"></span>
+          </div>
+          <span class="term-path">terminal@tuanna_akarsu:~/contact</span>
+        </div>
+        <div class="term-body">
+          <p style="color:var(--primary);margin-bottom:.5rem">Ready for collaboration? Establish a secure link below.</p>
+          <p style="margin-bottom:1rem"><span style="color:var(--primary)">$</span> contact --initiate</p>
+          <div class="term-grid">
+            <div><p class="term-lbl">Email</p><a href="mailto:akarsutuanna@gmail.com" class="term-val">akarsutuanna@gmail.com</a></div>
+            <div><p class="term-lbl">GitHub</p><a href="https://github.com/tuannaakarsu" target="_blank" class="term-val">github.com/tuannaakarsu</a></div>
+            <div><p class="term-lbl">LinkedIn</p><a href="https://www.linkedin.com/in/tuanna-akarsu" target="_blank" class="term-val">linkedin.com/in/tuanna-akarsu</a></div>
+            <div>
+              <p class="term-lbl">Konum / Durum</p>
+              <p style="color:var(--fg);margin-bottom:4px">İstanbul, Türkiye</p>
+              <p style="color:var(--primary);display:flex;align-items:center;gap:6px"><span class="dot"></span> Yeni fırsatlara açık</p>
+            </div>
+          </div>
+          <div class="term-btns">
+            <a href="mailto:akarsutuanna@gmail.com" class="btn-p">
+              <svg class="icon" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              İLETİŞİME GEÇ
+            </a>
+            <a href="https://github.com/tuannaakarsu" target="_blank" class="btn-s">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              GITHUB
+            </a>
+          </div>
+          <p style="margin-top:1rem"><span style="color:var(--primary)">$</span> <span class="tcursor"></span></p>
+        </div>
+      </div>
+
+    </div><!-- /p2body -->
+
+    <footer class="p2foot">
+      <div class="p2foot-in">
+        <span class="foot-copy">© 2026 TUANNA AKARSU // AI ENGINEER PORTFOLIO</span>
+        <div class="foot-links">
+          <a href="https://github.com/tuannaakarsu" target="_blank" class="foot-a">GITHUB</a>
+          <a href="https://www.linkedin.com/in/tuanna-akarsu" target="_blank" class="foot-a">LINKEDIN</a>
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- /page2 -->
+
+</div><!-- /wrapper -->
+
+<script>
+  function goTo2() {
+    document.body.classList.add('page2-active');
+    document.getElementById('page2').scrollTop = 0;
+  }
+  function goTo1() {
+    document.body.classList.remove('page2-active');
+    document.getElementById('page1').scrollTop = 0;
+  }
+
+  document.getElementById('goPage2').onclick = goTo2;
+  document.getElementById('goPage1btn').onclick = goTo1;
+  document.getElementById('goPage1brand').onclick = goTo1;
+
+  // terminal cursor
+  var c = document.querySelector('.tcursor');
+  if (c) setInterval(function(){ c.style.opacity = c.style.opacity==='0'?'1':'0'; }, 530);
+</script>
+</body>
+</html>
