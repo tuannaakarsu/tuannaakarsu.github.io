@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="utf-8" />
@@ -287,6 +287,24 @@
     .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: .9rem; }
     .tag { display: inline-block; background: var(--secBg); color: var(--secTxt); border: 1px solid var(--secBdr); font-family: var(--mono); font-size: 11px; padding: 3px 10px; white-space: nowrap; }
     .proj-link { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 12px; letter-spacing: .05em; color: var(--primary); text-decoration: none; }
+    /* CERTIFICATES */
+    .cert-sec { margin-bottom: 2.5rem; }
+    .cert-intro { color: var(--fg2); font-size: 13px; line-height: 1.65; margin: -.45rem 0 1.25rem; max-width: 650px; }
+    .cert-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    .cert-card { display: flex; flex-direction: column; min-width: 0; background: rgba(11,17,32,.6); border: 1px solid #1e293b; padding: 1.1rem; transition: border-color .3s, box-shadow .3s, transform .3s; }
+    .cert-card:hover { border-color: var(--pBtn); box-shadow: 0 0 20px rgba(56,189,248,.12); transform: translateY(-2px); }
+    .cert-top { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; margin-bottom: 1rem; }
+    .cert-icon { display: grid; place-items: center; width: 42px; height: 42px; flex-shrink: 0; border: 1px solid rgba(56,189,248,.45); background: rgba(56,189,248,.08); color: var(--primary); }
+    .cert-icon .icon { width: 22px; height: 22px; }
+    .cert-status { font-family: var(--mono); font-size: 10px; color: var(--primary); border: 1px solid rgba(56,189,248,.35); padding: 4px 7px; letter-spacing: .04em; }
+    .cert-name { font-family: var(--sans); font-size: 16px; line-height: 1.4; color: var(--fg); font-weight: 600; margin-bottom: .45rem; }
+    .cert-provider { font-family: var(--mono); color: var(--primary); font-size: 11px; margin-bottom: .5rem; }
+    .cert-meta { color: var(--fg3); font-family: var(--mono); font-size: 11px; margin-bottom: 1rem; }
+    .cert-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: auto; }
+    .cert-link { display: inline-flex; align-items: center; gap: 6px; padding: 8px 10px; color: var(--primary); border: 1px solid var(--border); text-decoration: none; font-family: var(--mono); font-size: 10px; letter-spacing: .03em; transition: border-color .2s; }
+    .cert-link:hover { border-color: var(--pBtn); }
+    .cert-note { margin-top: 1rem; color: var(--fg3); font-size: 11px; line-height: 1.6; font-family: var(--mono); }
+    @media (min-width: 640px) { .cert-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
     /* TECH */
     .tech-sec { background: var(--bg5); border-top: 1px solid rgba(62,72,79,.2); border-bottom: 1px solid rgba(62,72,79,.2); padding: 2rem 1.25rem; margin: 0 -1.25rem 2.5rem; }
@@ -499,10 +517,81 @@
         </div>
       </div>
 
+      <!-- SERTİFİKALAR -->
+      <section id="sertifikalar" class="cert-sec">
+        <div class="sec-hdr">
+          <h2>CERTIFICATIONS_&_LEARNING</h2>
+          <span class="sec-cnt">[ COUNT: 03 ]</span>
+        </div>
+        <p class="cert-intro">Yapay zekâ, yazılım geliştirme ve ilgili alanlarda tamamladığım eğitimler ve sertifikalar.</p>
+
+        <div class="cert-grid">
+          <!-- Bu kartları kendi sertifikalarınla değiştir. Görsel/PDF bağlantın varsa href alanına ekleyebilirsin. -->
+          <article class="cert-card">
+            <div class="cert-top">
+              <div class="cert-icon">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 15l-3.5 2 1-4-3-2.5 4-.3L12 6l1.5 4.2 4 .3-3 2.5 1 4z"/><circle cx="12" cy="12" r="9"/></svg>
+              </div>
+              <span class="cert-status">CERTIFICATE_01</span>
+            </div>
+            <h3 class="cert-name">Staj Katılım Sertifikası</h3>
+            <p class="cert-provider">SCA SOCİAL</p>
+            <p class="cert-meta">Alınma tarihi: 07/2025</p>
+            <div class="cert-actions">
+              <a class="cert-link" href="https://drive.google.com/file/d/1kfTOKkcfiyVK17rBZq4_xXpbHpXDzHWz/view?usp=drive_link" target="_blank" rel="noopener noreferrer">SERTİFİKAYI GÖR <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+
+          <article class="cert-card">
+            <div class="cert-top">
+              <div class="cert-icon">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V7z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg>
+              </div>
+              <span class="cert-status">CERTIFICATE_02</span>
+            </div>
+            <h3 class="cert-name">Level Up AI Workshop 2.Gün Katılım Sertifikası</h3>
+            <p class="cert-provider">ROKETSAN</p>
+            <p class="cert-meta">Alınma tarihi: 08/2026</p>
+            <div class="cert-actions">
+              <a class="cert-link" href="https://coderspace.io/sertifikalar/c02a4220-59c3-401e-8a3b-5c8b75f60456" target="_blank" rel="noopener noreferrer">SERTİFİKAYI GÖR <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+
+          <article class="cert-card">
+            <div class="cert-top">
+              <div class="cert-icon">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h8M8 11h8"/></svg>
+              </div>
+              <span class="cert-status">CERTIFICATE_03</span>
+            </div>
+            <h3 class="cert-name">Level Up AI Workshop 1.Gün Katılım Sertifikası</h3>
+            <p class="cert-provider">ROKETSAN</p>
+            <p class="cert-meta">Alınma tarihi: 08/2026</p>
+            <div class="cert-actions">
+              <a class="cert-link" href="https://coderspace.io/sertifikalar/2d45a8bb-e521-4113-bd00-8581c1757bb3" target="_blank" rel="noopener noreferrer">SERTİFİKAYI GÖR <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+        </div>
+        <p class="cert-note">// İPUCU: Sertifika bağlantısı yoksa ilgili bağlantı butonunu kaldırabilir veya PDF dosyanın adresini ekleyebilirsin.</p>
+      </section>
+
       <!-- DENEYİM -->
       <div id="deneyim">
         <h2 class="tl-title">EVOLUTION_TIMELINE</h2>
         <div class="tl-list">
+          <div class="tl-item">
+            <span class="tl-dot on"></span>
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.3rem;margin-bottom:.3rem">
+              <span class="tl-role">LLM Stajyeri (Stajyer)</span>
+              <span class="tl-date">Eyl 2026 — Devam Eden</span>
+            </div>
+            <p class="tl-co">ResmiHaberci · Türkiye, Hybrid</p>
+            <div class="tl-card on"><ul>
+              <li><span class="b">▹</span> Yapay Zeka modelleri ve token optimizasyonu.</li>
+              <li><span class="b">▹</span> LLM tabanlı sistem için kullanıcı testi.</li>
+              <li><span class="b">▹</span> LLM performans iyileştirme ve geliştirme araştırmaları.</li>
+            </ul></div>
+          </div>
           <div class="tl-item">
             <span class="tl-dot on"></span>
             <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.3rem;margin-bottom:.3rem">
